@@ -1,7 +1,13 @@
 package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlarmManager;
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -21,11 +29,16 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.util.Calendar;
 
+import static android.app.PendingIntent.getActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     TimePicker alarmTimePicker;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
+    SeekBar seekBar;
+    TextView textView;
+    boolean inSettings = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void OnToggleClicked(View view)
     {
@@ -74,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
             alarmManager.cancel(pendingIntent);
             Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
         }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int perc = sharedPref.getInt("pref_percentage", 0);
+        Toast.makeText(view.getContext(), "Percentage (test):" + perc, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -92,9 +110,14 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            intent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 }
+
+

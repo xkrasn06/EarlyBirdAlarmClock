@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <com.software.lightning.earlybirdalarmclock.SeekBarPreference
+        android:key="pref_percentage"
+        android:defaultValue="50"
+        android:title="Percentage"
+        android:summary="Percantage of 1$ which will go to UNICEF. The rest is for developers"/>
+
+
+</PreferenceScreen>
