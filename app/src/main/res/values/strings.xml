@@ -3,4 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="percentage">comsoftware.lightning.earlybirdalarmclock.Percentage</string>
     <string name="title_activity_settings">Settings</string>
+
+    <string name="wake_up_dialog">Wake up!!!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -12,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,11 +37,13 @@ import static android.app.PendingIntent.getActivity;
 public class MainActivity extends AppCompatActivity {
 
     TimePicker alarmTimePicker;
-    PendingIntent pendingIntent;
+    private PendingIntent pendingIntent;
     AlarmManager alarmManager;
     SeekBar seekBar;
     TextView textView;
     boolean inSettings = false;
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
             calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
             Intent intent = new Intent(this, AlarmReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
 
             time=(calendar.getTimeInMillis()-(calendar.getTimeInMillis()%60000));
             if(System.currentTimeMillis()>time)
@@ -81,12 +86,14 @@ public class MainActivity extends AppCompatActivity {
                 else
                     time = time + (1000*60*60*24);
             }
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
+            //salarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+
         }
         else
         {
-            alarmManager.cancel(pendingIntent);
             Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
+            stopAlarm();
         }
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         int perc = sharedPref.getInt("pref_percentage", 0);
@@ -118,6 +125,52 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void stopAlarm(){
+        if(alarmManager != null){
+            alarmManager.cancel(pendingIntent);
+        }
+
+        Toast.makeText(MainActivity.this, "ALARM WAS STOPED", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void createAlarmDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Your Title");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Click yes to exit!")
+                .setCancelable(false)
+                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        MainActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+        }
+
+
+
 }
 
 
