@@ -22,16 +22,14 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null)
-        {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        ringtone = RingtoneManager.getRingtone(context, alarmUri);
-        ringtone.play();
+        Intent alarmIntent = new Intent("android.intent.action.MAIN");
 
-       // AlarmDialog.alarmDialog(context, "title", "message");
+        alarmIntent.setClass(context, AlarmActivity.class);
+        alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        alarmIntent.putExtra("AlarmID", intent.getIntExtra("AlarmID", -1));
+
+        context.startActivity(alarmIntent);
     }
 
 

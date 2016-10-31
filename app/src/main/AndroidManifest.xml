@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver"></receiver>
+        <receiver android:name=".AlarmReceiver" />
 
         <activity
             android:name=".SettingsActivity"
@@ -28,6 +28,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.software.lightning.earlybirdalarmclock.MainActivity" />
+        </activity>
+        <activity android:name=".AlarmActivity"
+            android:theme="@style/Theme.AppCompat.Dialog">
         </activity>
     </application>
 

@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 3000,
+        //        PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(this, AlarmReceiver.class), 0));
     }
 
 
@@ -97,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
         }
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         int perc = sharedPref.getInt("pref_percentage", 0);
-        Toast.makeText(view.getContext(), "Percentage (test):" + perc, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
