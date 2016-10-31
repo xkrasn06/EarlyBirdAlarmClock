@@ -1,37 +1,26 @@
 package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.Application;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.util.Calendar;
+import java.util.TimeZone;
 
+import static android.app.PendingIntent.FLAG_NO_CREATE;
 import static android.app.PendingIntent.getActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,18 +28,36 @@ public class MainActivity extends AppCompatActivity {
     TimePicker alarmTimePicker;
     private PendingIntent pendingIntent;
     AlarmManager alarmManager;
-    SeekBar seekBar;
-    TextView textView;
-    boolean inSettings = false;
-
-    final Context context = this;
+    SharedPreferences sharedPref;
+    ToggleButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        button = (ToggleButton) findViewById(R.id.toggleButton);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        if (PendingIntent.getBroadcast(MainActivity.this, 0, intent, FLAG_NO_CREATE) != null) {     // je nastavena nejaka udalost
+            long time = sharedPref.getLong("eayrlybirdalarmclock.next", -1);
+            if (time > 0) {
+                time += TimeZone.getDefault().getRawOffset();
+                button.setChecked(true);
+                int minute = (int) ((time / 60000) % 60);
+                int hour = (int) ((time / 60000 / 60) % 24);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmTimePicker.setMinute(minute);
+                    alarmTimePicker.setHour(hour);
+                } else {
+                    alarmTimePicker.setCurrentMinute(minute);
+                    alarmTimePicker.setCurrentHour(hour);
+                }
+            }
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         long time;
         if (((ToggleButton) view).isChecked())
         {
-            Toast.makeText(MainActivity.this, "ALARM ON", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Alarm has been set", Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
             calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
@@ -89,16 +96,18 @@ public class MainActivity extends AppCompatActivity {
                 else
                     time = time + (1000*60*60*24);
             }
+            SharedPreferences.Editor e = sharedPref.edit();
+            e.putLong("eayrlybirdalarmclock.next", time);
+            e.commit();
             //salarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
             alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
 
         }
         else
         {
-            Toast.makeText(MainActivity.this, "ALARM OFF", Toast.LENGTH_SHORT).show();
             stopAlarm();
         }
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         int perc = sharedPref.getInt("pref_percentage", 0);
     }
 
@@ -129,49 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void stopAlarm(){
-        if(alarmManager != null){
+        if(pendingIntent != null){
             alarmManager.cancel(pendingIntent);
+        } else {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0).cancel();
         }
 
-        Toast.makeText(MainActivity.this, "ALARM WAS STOPED", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Alarm has been stopped", Toast.LENGTH_SHORT).show();
     }
-
-
-    private void createAlarmDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-
-        // set title
-        alertDialogBuilder.setTitle("Your Title");
-
-        // set dialog message
-        alertDialogBuilder
-                .setMessage("Click yes to exit!")
-                .setCancelable(false)
-                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, close
-                        // current activity
-                        MainActivity.this.finish();
-                    }
-                })
-                .setNegativeButton("No",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                    }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-        }
-
-
-
 }
 
 
