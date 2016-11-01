@@ -1,6 +1,7 @@
 package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlarmManager;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +72,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final MainActivity _this = this;
+        alarmTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                Toast.makeText(MainActivity.this, "dfsfsds", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(_this, AlarmReceiver.class);
+                if (PendingIntent.getBroadcast(MainActivity.this, 0, intent, FLAG_NO_CREATE) != null) {
+                    stopAlarm();
+                    Toast.makeText(MainActivity.this, "Alarm has been stopped", Toast.LENGTH_SHORT).show();
+                }
+                button.setChecked(false);
+            }
+        });
+
+        TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                Toast.makeText(MainActivity.this, "d___fsf_____sds", Toast.LENGTH_SHORT).show();
+            }
+        };
+
         //((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 3000,
         //        PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(this, AlarmReceiver.class), 0));
     }
@@ -106,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             stopAlarm();
+            Toast.makeText(MainActivity.this, "Alarm has been stopped", Toast.LENGTH_SHORT).show();
         }
 
         int perc = sharedPref.getInt("pref_percentage", 0);
@@ -144,8 +166,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AlarmReceiver.class);
             PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0).cancel();
         }
-
-        Toast.makeText(MainActivity.this, "Alarm has been stopped", Toast.LENGTH_SHORT).show();
     }
 }
 
