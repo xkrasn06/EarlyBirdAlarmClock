@@ -15,7 +15,7 @@
 
     <TimePicker
         android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
@@ -29,4 +29,143 @@
         android:layout_marginTop="33dp"
         android:layout_below="@+id/timePicker"
         android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/tagList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/toggleButton"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:addStatesFromChildren="true"
+        android:clipChildren="true">
+
+            <TextView
+                android:text="mon"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8" />
+
+            <TextView
+                android:text="tue"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView7" />
+
+            <TextView
+                android:text="wed"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView6" />
+
+            <TextView
+                android:text="thu"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5" />
+
+            <TextView
+                android:text="fri"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                tools:ignore="HardcodedText" />
+
+        <TextView
+            android:text="sat"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3" />
+
+        <TextView
+            android:text="sun"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tagList"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center">
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatMon"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatTue"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatWed"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatThu"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatFri"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatSat"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:text="@null"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeatSun"
+        android:layout_marginLeft="10dp"/>
+    </LinearLayout>
+
+
 </RelativeLayout>
