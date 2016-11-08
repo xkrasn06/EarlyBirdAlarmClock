@@ -2,6 +2,7 @@ package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
@@ -22,6 +23,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+        wl.acquire();
         Intent alarmIntent = new Intent("android.intent.action.MAIN");
 
         alarmIntent.setClass(context, AlarmActivity.class);
@@ -30,6 +34,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         alarmIntent.putExtra("AlarmID", intent.getIntExtra("AlarmID", -1));
 
         context.startActivity(alarmIntent);
+        wl.release();
     }
 
 

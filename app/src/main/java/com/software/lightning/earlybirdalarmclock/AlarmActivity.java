@@ -57,7 +57,7 @@ public class AlarmActivity extends AppCompatActivity {
         final AlarmActivity _this = this;
         alert.setNegativeButton("Postpone (1$)", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 5000,
+                ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 600000,
                         PendingIntent.getBroadcast(AlarmActivity.this, 0, new Intent(_this, AlarmReceiver.class), 0));
                 ringtone.stop();
                 AlarmActivity.this.finish();
