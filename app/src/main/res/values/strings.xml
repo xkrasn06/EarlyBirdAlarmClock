@@ -6,5 +6,8 @@
 
     <string name="wake_up_dialog">Wake up!!!</string>
     <string name="yes">Yes</string>
+
     <string name="no">No</string>
+    <string name="PurchaseString">Recharge snooze credit</string>
+    <string name="PurchaseStringLong">Add another 2$ to your snooze credit (in-app purchase)</string>
 </resources>

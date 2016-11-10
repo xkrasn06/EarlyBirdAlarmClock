@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static final String EXTRA_NO_HEADERS = ":android:no_headers";
 
+    public void recharge(double amount) {
+        AlarmActivity.rechargeCredit(2.0);
+        String toastMessage = "A string " + AlarmActivity.getCredit();
+        Toast.makeText(SettingsActivity.this, toastMessage , Toast.LENGTH_SHORT).show();
+    }
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -38,6 +44,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return true;
         }
     };
+
+
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -114,6 +122,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
             bindPreferenceSummaryToValue(findPreference("pref_percentage"));
+            final Preference examplePreference = findPreference("pref_purchase");
+            examplePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // handle click here
+
+                    AlarmActivity.rechargeCredit(2.0);
+
+                    return false;
+                }
+            });
         }
     }
 }

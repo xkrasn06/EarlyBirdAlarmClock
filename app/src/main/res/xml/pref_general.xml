@@ -6,6 +6,11 @@
         android:defaultValue="50"
         android:title="Percentage"
         android:summary="Percantage of 1$ which will go to UNICEF. The rest is for developers"/>
+    <Preference
+        android:key="pref_purchase"
+
+        android:summary="@string/PurchaseStringLong"
+        android:title="@string/PurchaseString"/>
 
 
 </PreferenceScreen>
