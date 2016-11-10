@@ -14,11 +14,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class AlarmActivity extends AppCompatActivity {
 
     Ringtone ringtone;
+    static double snoozeCredit = 0.0;
 
+    public static void rechargeCredit(double amount) {
+        snoozeCredit += amount;
+    }
+
+    public static void spendCredit(double amount) {
+        snoozeCredit -= amount;
+    }
+
+    public void showCredit() {
+        String toastMessage = "Remaining snooze credit is " + AlarmActivity.getCredit();
+        Toast.makeText(AlarmActivity.this, toastMessage , Toast.LENGTH_SHORT).show();
+    }
+
+    public static double getCredit() {
+        return snoozeCredit;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -55,11 +73,14 @@ public class AlarmActivity extends AppCompatActivity {
         });
 
         final AlarmActivity _this = this;
-        alert.setNegativeButton("Postpone (1$)", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Postpone (0.20$)", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 ((AlarmManager) getSystemService(ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 600000,
                         PendingIntent.getBroadcast(AlarmActivity.this, 0, new Intent(_this, AlarmReceiver.class), 0));
                 ringtone.stop();
+
+                spendCredit(0.20);
+                showCredit();
                 AlarmActivity.this.finish();
             }
         });
