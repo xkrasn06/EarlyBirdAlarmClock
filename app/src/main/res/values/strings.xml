@@ -10,4 +10,6 @@
     <string name="no">No</string>
     <string name="PurchaseString">Recharge snooze credit</string>
     <string name="PurchaseStringLong">Add another 2$ to your snooze credit (in-app purchase)</string>
+    <string name="Credit">Credit</string>
+    <string name="CreditLong">Current credit value</string>
 </resources>

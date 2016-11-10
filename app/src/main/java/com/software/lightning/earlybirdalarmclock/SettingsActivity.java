@@ -31,9 +31,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static final String EXTRA_NO_HEADERS = ":android:no_headers";
 
-    public void recharge(double amount) {
-        AlarmActivity.rechargeCredit(2.0);
-        String toastMessage = "A string " + AlarmActivity.getCredit();
+    public void toastCredit() {
+        String toastMessage = "Remaining credit is " + AlarmActivity.getCredit();
         Toast.makeText(SettingsActivity.this, toastMessage , Toast.LENGTH_SHORT).show();
     }
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
@@ -129,10 +128,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     // handle click here
 
                     AlarmActivity.rechargeCredit(2.0);
-
+                    String toastMessage = "Remaining snooze credit is " + AlarmActivity.getCredit();
+                    Toast.makeText(getActivity(), toastMessage , Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
+
+            final Preference examplePreference2 = findPreference("pref_credit");
+            examplePreference2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // handle click here
+
+                    double credit = AlarmActivity.getCredit();
+                    String toastMessage = "Remaining snooze credit is " + AlarmActivity.getCredit();
+                    Toast.makeText(getActivity(), toastMessage , Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+
         }
     }
 }

@@ -11,6 +11,11 @@
 
         android:summary="@string/PurchaseStringLong"
         android:title="@string/PurchaseString"/>
+    <Preference
+        android:key="pref_credit"
+
+        android:summary="@string/CreditLong"
+        android:title="@string/Credit"/>
 
 
 </PreferenceScreen>
