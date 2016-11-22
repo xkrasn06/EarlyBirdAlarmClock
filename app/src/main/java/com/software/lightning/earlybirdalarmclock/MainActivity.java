@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
         if (((ToggleButton) view).isChecked())
         {
             Toast.makeText(MainActivity.this, "Alarm has been set", Toast.LENGTH_SHORT).show();
-            double credit = AlarmActivity.getCredit();
-            String toastMessage = "Remaining snooze credit is " + AlarmActivity.getCredit();
-            Toast.makeText(MainActivity.this, toastMessage , Toast.LENGTH_SHORT).show();
+            //double credit = AlarmActivity.getCredit();
+            //String toastMessage = "Remaining snooze credit is " + AlarmActivity.getCredit();
+            //Toast.makeText(MainActivity.this, toastMessage , Toast.LENGTH_SHORT).show();
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
             calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
