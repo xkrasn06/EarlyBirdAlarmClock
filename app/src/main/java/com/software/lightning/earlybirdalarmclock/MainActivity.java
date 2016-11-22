@@ -225,6 +225,10 @@ public class MainActivity extends AppCompatActivity {
                 pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
             }
+            double credit = sharedPref.getFloat("pref_credit", 0);
+            if (credit < 2.0) {
+                Toast.makeText(MainActivity.this, "You are running out of credit, " + credit + "$ remaining", Toast.LENGTH_SHORT).show();
+            }
         }
         else
         {
