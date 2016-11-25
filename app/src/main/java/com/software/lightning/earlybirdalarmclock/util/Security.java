@@ -15,6 +15,7 @@
 
 package com.software.lightning.earlybirdalarmclock.util;
 
+import android.support.compat.BuildConfig;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class Security {
         if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) ||
                 TextUtils.isEmpty(signature)) {
             Log.e(TAG, "Purchase verification failed: missing data.");
-            return false;
+            return BuildConfig.DEBUG;
         }
 
         PublicKey key = Security.generatePublicKey(base64PublicKey);

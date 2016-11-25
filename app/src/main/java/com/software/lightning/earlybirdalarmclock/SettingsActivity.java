@@ -133,6 +133,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.d("earlybird_log", "onActivityResult handled by IABUtil (up).");
+        }
+    }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
@@ -145,45 +158,71 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
             final Activity activity = getActivity();
 
-            final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
-                    = new IabHelper.OnIabPurchaseFinishedListener() {
-                public void onIabPurchaseFinished(IabResult result, Purchase purchase)
+            addPreferencesFromResource(R.xml.pref_general);
+            setHasOptionsMenu(true);
+            bindPreferenceSummaryToValue(findPreference("pref_percentage"));
+            final Preference creditViewPref = findPreference("pref_credit_view");
+            creditViewPref.setSummary("" + String.format("%.2f", sharedPref.getFloat("pref_credit", 0)) + "$");
+
+            final IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener()
+            {
+                public void onConsumeFinished(Purchase purchase, IabResult result)
                 {
-                    if (result.isFailure()) {
-                        Log.d("earlybird", "Error purchasing: " + result);
-                        return;
+                    if (mHelper == null) return;
+                    if (result.isSuccess())
+                    {
+                        Toast.makeText(activity, "Succesfully purchased additional credit", Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor e = sharedPref.edit();
+                        e.putFloat("pref_credit", sharedPref.getFloat("pref_credit", 0) + 2);
+                        e.commit();
+                        creditViewPref.setSummary("" + String.format("%.2f", sharedPref.getFloat("pref_credit", 0)) + "$");
                     }
-                    else if (purchase.getSku().equals("com.software.lightning.earlybirdalarmclock")) {
-                        Toast.makeText(activity, "purchased", Toast.LENGTH_SHORT).show();
+                    else
+                    {
+                        Log.d("earlybird", "Error purchasing 3: " + result);
+                        Toast.makeText(activity, "Error purchasing item", Toast.LENGTH_SHORT).show();
                     }
                 }
             };
 
-            addPreferencesFromResource(R.xml.pref_general);
-            setHasOptionsMenu(true);
-            bindPreferenceSummaryToValue(findPreference("pref_percentage"));
-
-
-            final Preference creditViewPref = findPreference("pref_credit_view");
-            creditViewPref.setSummary("" + String.format("%.2f", sharedPref.getFloat("pref_credit", 0)) + "$");
+            final IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+                    = new IabHelper.OnIabPurchaseFinishedListener() {
+                @Override
+                public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                    try {
+                        mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+                    } catch (Exception e) {
+                        Log.d("earlybird", "Error purchasing 2: " + result);
+                    }
+                }
+            };
 
             final Preference creditPref = findPreference("pref_credit");
             creditPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    SharedPreferences.Editor e = sharedPref.edit();
-                    e.putFloat("pref_credit", sharedPref.getFloat("pref_credit", 0) + 2);
-                    e.commit();
                     creditViewPref.setSummary("" + String.format("%.2f", sharedPref.getFloat("pref_credit", 0)) + "$");
                     try {
-                        mHelper.launchPurchaseFlow(activity, "android.test.purchased", 10001,
-                                mPurchaseFinishedListener, "mypurchasetoken");
+                        mHelper.launchPurchaseFlow(activity, "android.test.purchased", 1001,
+                                mPurchaseFinishedListener, "token" );
                     } catch (Exception ex) {
                         Log.d("earlybird_log", "Error purchasing: " + ex.getMessage());
                     }
                     return false;
                 }
             });
+        }
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            // Pass on the activity result to the helper for handling
+            if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+                // not handled, so handle it ourselves (here's where you'd
+                // perform any handling of activity results not related to in-app
+                // billing...
+                super.onActivityResult(requestCode, resultCode, data);
+            } else {
+                Log.d("earlybird_log", "onActivityResult handled by IABUtil (down).");
+            }
         }
     }
 }

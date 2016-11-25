@@ -1,6 +1,7 @@
 package com.software.lightning.earlybirdalarmclock;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -227,7 +230,8 @@ public class MainActivity extends AppCompatActivity {
             }
             double credit = sharedPref.getFloat("pref_credit", 0);
             if (credit < 2.0) {
-                Toast.makeText(MainActivity.this, "You are running out of credit, " + credit + "$ remaining", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "You are running out of credit, " + String.format("%.2f", credit) +
+                        "$ remaining", Toast.LENGTH_SHORT).show();
             }
         }
         else
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            intent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
+            //intent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
             startActivity(intent);
             return true;
         }
