@@ -92,7 +92,7 @@ public class AlarmActivity extends AppCompatActivity {
         final Notification notification =
                 new android.support.v7.app.NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                        .setContentTitle("Snooze alarm at " + (new SimpleDateFormat("HH:mm:ss:SSS"))
+                        .setContentTitle("Snooze alarm at " + (new SimpleDateFormat("HH:mm"))
                                 .format(new Date(System.currentTimeMillis() + 600000 + TimeZone.getDefault().getRawOffset())))
                         .setContentText("Tap to cancel")
                         .addAction(R.drawable.ic_notifications_black_24dp, "Cancel", action1PendingIntent)
@@ -135,6 +135,7 @@ public class AlarmActivity extends AppCompatActivity {
             Intent i = new Intent(context, AlarmReceiver.class);
             PendingIntent.getBroadcast(context, 0, i, 0).cancel();
             Toast.makeText(context, "Snoozed alarm disabled" , Toast.LENGTH_SHORT).show();
+            NotificationManagerCompat.from(context).cancel(0);
         }
     }
 }
