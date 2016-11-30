@@ -202,9 +202,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     creditViewPref.setSummary("" + String.format("%.2f", sharedPref.getFloat("pref_credit", 0)) + "$");
+
+                    String perc =  String.format("%.2f", sharedPref.getFloat("pref_percentage", 0));
                     try {
                         mHelper.launchPurchaseFlow(activity, "android.test.purchased", 1001,
-                                mPurchaseFinishedListener, "token" );
+                                mPurchaseFinishedListener, perc );
                     } catch (Exception ex) {
                         Log.d("earlybird_log", "Error purchasing: " + ex.getMessage());
                     }
