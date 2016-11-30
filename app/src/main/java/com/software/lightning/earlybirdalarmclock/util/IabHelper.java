@@ -734,7 +734,11 @@ public class IabHelper {
         checkNotDisposed();
         checkSetupDone("consume");
 
-        if (!itemInfo.mItemType.equals(ITEM_TYPE_INAPP)) {
+        if (itemInfo == null || itemInfo.mItemType == null) {
+            return;
+        }
+
+        if (itemInfo == null || !itemInfo.mItemType.equals(ITEM_TYPE_INAPP)) {
             throw new IabException(IABHELPER_INVALID_CONSUMPTION,
                     "Items of type '" + itemInfo.mItemType + "' can't be consumed.");
         }
@@ -1080,6 +1084,9 @@ public class IabHelper {
                     }
                     catch (IabException ex) {
                         results.add(ex.getResult());
+                    } catch (Exception e) {
+                        flagEndAsync();
+                        return;
                     }
                 }
 

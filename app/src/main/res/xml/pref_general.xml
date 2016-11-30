@@ -5,7 +5,7 @@
         android:key="pref_percentage"
         android:defaultValue="50"
         android:title="Percentage"
-        android:summary="Percantage of 1$ which will go to UNICEF. The rest is for developers"/>
+        android:summary="Percantage of 0.20$ which will go to UNICEF. The rest is for developers"/>
     <Preference
         android:key="pref_credit"
         android:summary="@string/PurchaseStringLong"

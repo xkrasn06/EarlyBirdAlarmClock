@@ -104,7 +104,7 @@ public class AlarmActivity extends AppCompatActivity {
 
 
         final AlarmActivity _this = this;
-        if (getCredit() >= 0.2) {
+        if (getCredit() >= 0.19) {
             alert.setNegativeButton("Postpone (0.20$)", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -135,7 +135,7 @@ public class AlarmActivity extends AppCompatActivity {
             Intent i = new Intent(context, AlarmReceiver.class);
             PendingIntent.getBroadcast(context, 0, i, 0).cancel();
             Toast.makeText(context, "Snoozed alarm disabled" , Toast.LENGTH_SHORT).show();
-            NotificationManagerCompat.from(context).cancel(0);
+            NotificationManagerCompat.from(context).cancelAll();
         }
     }
 }
